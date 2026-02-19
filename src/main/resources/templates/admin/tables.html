@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Table Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/admin/dashboard">← Admin</a>
+        <span class="navbar-text text-white">Table Management</span>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+        </form>
+    </div>
+</nav>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Tables</h4>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr><th>Table Number</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="table : ${tables}">
+                        <td th:text="${table.tableNumber}"></td>
+                        <td><span class="badge"
+                                  th:classappend="${table.status == 'AVAILABLE'} ? 'bg-success' : 'bg-danger'"
+                                  th:text="${table.status}"></span></td>
+                        <td>
+                            <form th:action="@{/admin/tables/{id}/delete(id=${table.id})}" method="post" class="d-inline">
+                                <button class="btn btn-sm btn-outline-danger" type="submit"
+                                        onclick="return confirm('Delete this table?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Add Table</div>
+                <div class="card-body">
+                    <form th:action="@{/admin/tables/save}" method="post">
+                        <div class="mb-2">
+                            <label class="form-label">Table Number</label>
+                            <input type="text" name="tableNumber" class="form-control" required placeholder="e.g. TABLE_6">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Table</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
